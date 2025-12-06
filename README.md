@@ -1,15 +1,14 @@
 # Employee Management System - ASP.NET Core 8 MVC
 
-A production-ready ASP.NET Core 8 MVC template demonstrating enterprise-grade CRUD operations for employee management, with advanced features including sorting, searching, pagination, and responsive Bootstrap UI.
-
+A complete ASP.NET Core 8 MVC application implementing CRUD operations, multi-column search, dynamic sorting, pagination, and responsive Bootstrap UI.  
+Developed using Entity Framework Core 8 with SQL Server (Code-First approach).
 ---
 
 ## 🚀 Features
 - ✅ Complete CRUD Operations - Create, Read, Update, Delete employee records
 - 🔍 Advanced Search - Multi-field search across employee attributes
-- 🔃 Dynamic Sorting - Click-to-sort on all table columns (ascending/descending)
 - 📄 Pagination - Efficient data loading with configurable page size
-- 📱 Responsive Design - Bootstrap 5 mobile-first interface
+- 📱 Responsive Design - Bootstrap 5 
 - 🗄️ Database Seeding - Automatic initialization with sample data
 - 🔗 Entity Framework Core - Code-first approach with SQL Server
 - ✔️ Form Validation - Client and server-side validation
@@ -41,7 +40,7 @@ A production-ready ASP.NET Core 8 MVC template demonstrating enterprise-grade CR
 ## 📋 Prerequisites
 - .NET 8.0 SDK or higher
 - SQL Server (Express/Developer/Standard)
-- Visual Studio 2022 or VS Code
+- Visual Studio 2025 or VS Code
 - Basic knowledge of C# and ASP.NET Core MVC
 
 ---
@@ -73,7 +72,7 @@ Update `appsettings.json` with your SQL Server connection string:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=YOUR_SERVER;Database=EmployeeDB;Trusted_Connection=True;TrustServerCertificate=True"
+    "DefaultConnection": "Server=YOUR_SERVER;Database=EmployeeManagementSystemDB;Trusted_Connection=True;TrustServerCertificate=True"
   }
 }
 ```
@@ -136,35 +135,68 @@ EmployeeManagementSystem/
 
 ## 🎯 Key Implementation Highlights
 
-### Pagination Logic
+## 📄 **Pagination Logic**
+
 ```csharp
-int totalRecords = await employees.CountAsync();
+int totalRecords = employees.Count;
 int totalPages = (int)Math.Ceiling(totalRecords / (double)PageSize);
 
-var paginatedList = await employees
-    .Skip((pageNumber - 1) * PageSize)
+if (page < 1)
+    page = 1;
+if (page > totalPages && totalPages > 0)
+    page = totalPages;
+
+var pagedEmployees = employees
+    .Skip((page - 1) * PageSize)
     .Take(PageSize)
-    .ToListAsync();
+    .ToList();
 ```
 
-### Multi-Column Search
+## 🔍 **Multi-Column Search**
+
 ```csharp
-employees = employees.Where(e =>
-    (e.FirstName != null && e.FirstName.ToLower().Contains(lowerSearch)) ||
-    (e.LastName != null && e.LastName.ToLower().Contains(lowerSearch)) ||
-    (e.Email != null && e.Email.ToLower().Contains(lowerSearch)) ||
-    (e.Department != null && e.Department.ToLower().Contains(lowerSearch))
-);
+if (!string.IsNullOrEmpty(searchString))
+{
+    string lower = searchString.ToLower();
+
+    employees = employees
+        .Where(e =>
+            e.FirstName.ToLower().Contains(lower) ||
+            e.LastName.ToLower().Contains(lower) ||
+            e.EmailAddress.ToLower().Contains(lower) ||
+            e.Department.ToString().ToLower().Contains(lower))
+        .ToList();
+}
 ```
 
-### Dynamic Sorting
+---
+
+## 🔃 **Dynamic Sorting**
+
 ```csharp
 employees = sortOrder switch
 {
-    "FirstName" => employees.OrderBy(e => e.FirstName),
-    "FirstName_desc" => employees.OrderByDescending(e => e.FirstName),
-    "LastName" => employees.OrderBy(e => e.LastName),
-    _ => employees.OrderBy(e => e.FirstName)
+    "FullName" => employees.OrderBy(e => e.FirstName)
+                          .ThenBy(e => e.LastName)
+                          .ToList(),
+
+    "FullName_desc" => employees.OrderByDescending(e => e.FirstName)
+                               .ThenByDescending(e => e.LastName)
+                               .ToList(),
+
+    "Department" => employees.OrderBy(e => e.Department)
+                             .ToList(),
+
+    "Department_desc" => employees.OrderByDescending(e => e.Department)
+                                 .ToList(),
+
+    "JoinedDate" => employees.OrderBy(e => e.JoinedDate)
+                             .ToList(),
+
+    "JoinedDate_desc" => employees.OrderByDescending(e => e.JoinedDate)
+                                 .ToList(),
+
+    _ => employees.OrderBy(e => e.EmployeeID).ToList(),
 };
 ```
 
@@ -217,8 +249,6 @@ Manual Testing Checklist:
 This project demonstrates proficiency in:
 - ASP.NET Core MVC architecture
 - Entity Framework Core ORM
-- LINQ query optimization
-- Asynchronous programming (async/await)
 - Bootstrap responsive design
 - Client-side and server-side validation
 - Partial views and view components
@@ -227,9 +257,3 @@ This project demonstrates proficiency in:
 
 ---
 
-
-## 🙏 Acknowledgments
-
-- Bootstrap - For the excellent CSS framework  
-- Microsoft - For ASP.NET Core and Entity Framework Core  
-- Open-source community for continuous inspiration
