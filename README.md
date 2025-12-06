@@ -4,19 +4,19 @@ This project was developed as part of an interview assessment requiring strong b
 
 ---
 
-## 🚀 Features
-- ✅ Complete CRUD Operations - Create, Read, Update, Delete employee records
-- 🔍 Advanced Search - Multi-field search across employee attributes
-- 📄 Pagination - Efficient data loading with configurable page size
-- 📱 Responsive Design - Bootstrap 5 
-- 🗄️ Database Seeding - Automatic initialization with sample data
-- 🔗 Entity Framework Core - Code-first approach with SQL Server
-- ✔️ Form Validation - Client and server-side validation
-- 💬 Success Notifications - User feedback with TempData alerts
+## Features
+-  Complete CRUD Operations - Create, Read, Update, Delete employee records
+-  Advanced Search - Multi-field search across employee attributes
+-  Pagination - Efficient data loading with configurable page size
+-  Responsive Design - Bootstrap 5 
+-  Database Seeding - Automatic initialization with sample data
+-  Entity Framework Core - Code-first approach with SQL Server
+-  Form Validation - Client and server-side validation
+-  Success Notifications - User feedback with TempData alerts
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 ### Employee List View
 ![Comprehensive data table with multi-column search, sortable headers, and pagination controls.](Assets/screenshot1.png)
 
@@ -37,7 +37,7 @@ This project was developed as part of an interview assessment requiring strong b
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 - .NET 8.0 SDK or higher
 - SQL Server (Express/Developer/Standard)
 - Visual Studio 2025 or VS Code
@@ -45,7 +45,7 @@ This project was developed as part of an interview assessment requiring strong b
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 | Category    | Technologies                     |
 |------------|----------------------------------|
@@ -59,7 +59,7 @@ This project was developed as part of an interview assessment requiring strong b
 
 ---
 
-## ⚙️ Installation & Setup
+##  Installation & Setup
 
 1. **Clone the Repository**
 ```bash
@@ -94,7 +94,7 @@ The application will automatically:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 EmployeeManagementSystem/
@@ -133,9 +133,9 @@ EmployeeManagementSystem/
 
 ---
 
-## 🎯 Key Implementation Highlights
+##  Key Implementation Highlights
 
-## 📄 **Pagination Logic**
+##  **Pagination Logic**
 
 ```csharp
 int totalRecords = employees.Count;
@@ -152,7 +152,7 @@ var pagedEmployees = employees
     .ToList();
 ```
 
-## 🔍 **Multi-Column Search**
+##  **Multi-Column Search**
 
 ```csharp
 if (!string.IsNullOrEmpty(searchString))
@@ -171,7 +171,7 @@ if (!string.IsNullOrEmpty(searchString))
 
 ---
 
-## 🔃 **Dynamic Sorting**
+##  **Dynamic Sorting**
 
 ```csharp
 employees = sortOrder switch
@@ -202,7 +202,7 @@ employees = sortOrder switch
 
 ---
 
-## 🔧 Customization
+##  Customization
 
 **Change Page Size**  
 In `EmployeeController.cs`:
@@ -230,7 +230,7 @@ Replace SQL Server with PostgreSQL, MySQL, or SQLite by updating:
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 Manual Testing Checklist:
 - Create new employee record
@@ -244,7 +244,7 @@ Manual Testing Checklist:
 
 ---
 
-## 📚 Learning Outcomes
+##  Learning Outcomes
 
 This project demonstrates proficiency in:
 - ASP.NET Core MVC architecture
