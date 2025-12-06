@@ -108,24 +108,28 @@ EmployeeManagementSystem/
 │   └── Employee.cs                # Employee entity model
 ├── Views/
 │   ├── Employee/
-│   │   ├── Index.cshtml
-│   │   ├── Create.cshtml
-│   │   ├── Edit.cshtml
-│   │   ├── Details.cshtml
-│   │   └── Delete.cshtml
+│   │   ├── Index.cshtml           # List view with search/sort/pagination
+│   │   ├── Create.cshtml          # Create form
+│   │   ├── Edit.cshtml            # Edit form
+│   │   ├── Details.cshtml         # Details view
+│   │   └── Delete.cshtml          # Delete confirmation
 │   └── Shared/
-│       ├── _Layout.cshtml
-│       ├── _Navbar.cshtml
-│       ├── _Pagination.cshtml
-│       └── _SortableColumn.cshtml
+│       ├── _Layout.cshtml         # Master layout
+│       ├── _Navbar.cshtml         # Navigation bar partial
+│       ├── _Footer.cshtml         # Footer partial
+│       ├── _Pagination.cshtml     # Pagination partial
+│       ├── _SortableColumn.cshtml # Sortable column partial
+│       └── _ValidationScriptsPartial.cshtml # Scripts for form validation
 ├── wwwroot/
 │   ├── css/
+│   │   └── modern-site.css        # Custom styles
 │   └── js/
-├── .editorconfig
+│       └── modern-site.js         # Custom scripts
+├── .editorconfig                  # Code style configuration
 ├── .gitignore
 ├── README.md
 ├── appsettings.json
-└── Program.cs
+└── Program.cs                      # Application entry point
 ```
 
 ---
