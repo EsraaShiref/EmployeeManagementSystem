@@ -11,19 +11,16 @@ namespace EmployeeManagementSystem.Controllers
     public class EmployeeController : Controller
     {
         private readonly AppDbContext _context;
-        private const int PageSize = 6; // عدد السجلات لكل صفحة
+        private const int PageSize = 6; 
 
         public EmployeeController(AppDbContext context)
         {
             _context = context;
         }
 
-        // ======================================================
-        // INDEX (List + Sort + Search + Pagination)
-        // ======================================================
+        
         public async Task<IActionResult> Index(string sortOrder, string searchString, int page = 1)
         {
-            // جلب كل البيانات أولاً لتجنب مشكلة ToString على enum
             var employees = await _context.Employees.ToListAsync();
 
             // SEARCH
@@ -65,7 +62,6 @@ namespace EmployeeManagementSystem.Controllers
                 .Take(PageSize)
                 .ToList();
 
-            // تمرير البيانات للـ View عبر ViewData
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
             ViewData["CurrentPage"] = page;
@@ -74,9 +70,6 @@ namespace EmployeeManagementSystem.Controllers
             return View(pagedEmployees);
         }
 
-        // ======================================================
-        // DETAILS
-        // ======================================================
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -89,17 +82,13 @@ namespace EmployeeManagementSystem.Controllers
             return View(employee);
         }
 
-        // ======================================================
-        // CREATE (GET)
-        // ======================================================
+    
         public IActionResult Create()
         {
             return View();
         }
 
-        // ======================================================
-        // CREATE (POST)
-        // ======================================================
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Department,FirstName,LastName,IsActive,EmailAddress,Phone")] Employee employee)
@@ -117,9 +106,7 @@ namespace EmployeeManagementSystem.Controllers
             return View(employee);
         }
 
-        // ======================================================
-        // EDIT (GET)
-        // ======================================================
+    
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -132,9 +119,7 @@ namespace EmployeeManagementSystem.Controllers
             return View(employee);
         }
 
-        // ======================================================
-        // EDIT (POST)
-        // ======================================================
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EmployeeID,Department,FirstName,LastName,IsActive,EmailAddress,Phone,RowGuid,JoinedDate")] Employee employee)
@@ -165,9 +150,7 @@ namespace EmployeeManagementSystem.Controllers
             return View(employee);
         }
 
-        // ======================================================
-        // DELETE (GET)
-        // ======================================================
+       
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,9 +163,7 @@ namespace EmployeeManagementSystem.Controllers
             return View(employee);
         }
 
-        // ======================================================
-        // DELETE (POST)
-        // ======================================================
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

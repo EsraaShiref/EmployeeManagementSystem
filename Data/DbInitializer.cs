@@ -10,7 +10,7 @@ namespace EmployeeManagementSystem.Data
         public static void Initialize(AppDbContext context)
         {
             if (context.Employees.Any())
-                return; // already seeded
+                return;
 
             var Employees = new List<Employee>
             {

@@ -1,10 +1,8 @@
-@* Views/Shared/_Pagination.cshtml — preserves searchString and sortOrder in links *@
 @{
     var tuple = (dynamic)Model;
     int currentPage = tuple.Item1;
     int totalPages = tuple.Item2;
 
-    // preserve existing query values (searchString, sortOrder) from request
     var query = Context.Request.Query;
     var currentFilter = query.ContainsKey("searchString") ? query["searchString"].ToString() : "";
     var currentSort = query.ContainsKey("sortOrder") ? query["sortOrder"].ToString() : "";
