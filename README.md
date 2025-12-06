@@ -1,7 +1,7 @@
 # Employee Management System - ASP.NET Core 8 MVC
+A complete ASP.NET Core 8 MVC application implementing CRUD operations, multi-column search, dynamic sorting, pagination, and fully responsive Bootstrap UI.  
+This project was developed as part of an interview assessment requiring strong backend, frontend, and Entity Framework Core skills.
 
-A complete ASP.NET Core 8 MVC application implementing CRUD operations, multi-column search, dynamic sorting, pagination, and responsive Bootstrap UI.  
-Developed using Entity Framework Core 8 with SQL Server (Code-First approach).
 ---
 
 ## 🚀 Features
