@@ -1,0 +1,50 @@
+-- =========================================================
+-- EmployeeManagementSystem Database - Updated Schema
+-- =========================================================
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'EmployeeManagementSystemDB')
+BEGIN
+    CREATE DATABASE [EmployeeManagementSystemDB];
+END
+GO
+
+USE [EmployeeManagementSystemDB];
+GO
+
+SET NOCOUNT ON;
+SET XACT_ABORT ON;
+GO
+
+-- Drop dependent objects if they exist
+IF OBJECT_ID('dbo.spEmployees_GetAll', 'P') IS NOT NULL DROP PROCEDURE dbo.spEmployees_GetAll;
+IF OBJECT_ID('dbo.Employees', 'U') IS NOT NULL DROP TABLE dbo.Employees;
+GO
+
+-- Create Employees table
+CREATE TABLE dbo.Employees (
+    EmployeeID INT IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Department NVARCHAR(50) NOT NULL,           -- Enum represented as text
+    IsActive BIT NOT NULL DEFAULT 1,  -- Boolean flag
+    EmailAddress NVARCHAR(100) NOT NULL,
+    Phone NVARCHAR(25) NULL,
+    RowGuid UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT AK_Employees_rowguid UNIQUE
+        CONSTRAINT DF_Employees_rowguid DEFAULT (NEWID()),
+    JoinedDate DATETIME2 NOT NULL DEFAULT (GETDATE())
+);
+GO
+
+-- Unique constraint on Email
+ALTER TABLE dbo.Employees
+ADD CONSTRAINT UQ_Employees_Email UNIQUE (EmailAddress);
+GO
+
+-- Stored procedure to get all employees
+CREATE PROCEDURE dbo.spEmployees_GetAll
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT * FROM dbo.Employees ORDER BY EmployeeID;
+END
+GO

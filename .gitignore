@@ -1,0 +1,58 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio cache/options directory
+.vs/
+.vscode/
+
+# Rider project files
+.idea/
+
+# ASP.NET Core
+wwwroot/lib/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+# Uncomment if necessary depending on your setup
+# .nuget/
+
+# Entity Framework Core Migrations
+**/Migrations/
+
+# Dotnet publish folder
+publish/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Rider
+*.sln.iml
+
+# User secrets (sensitive data)
+secrets.json
+appsettings.*.json
+
+# Backup & temp files
+*.bak
+*.backup
+*.swp
+*.tmp
+
+# JetBrains Rider specific
+.idea/
+*.sln.iml

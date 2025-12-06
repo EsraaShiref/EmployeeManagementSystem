@@ -1,0 +1,104 @@
+/* ======== Custom Employee Management UI Styles ======== */
+
+:root {
+  --primary-color: #0d6efd;
+  --primary-light: #e7f1ff;
+  --danger-color: #dc3545;
+  --success-color: #198754;
+  --text-dark: #333;
+  --text-light: #6c757d;
+  --card-radius: 12px;
+}
+
+/* Global page spacing */
+body {
+  background-color: #f7f9fc;
+  color: var(--text-dark);
+  padding-top: 70px; /* navbar space */
+}
+
+/* Card styling */
+.card-custom {
+  border-radius: var(--card-radius);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+/* Tables */
+table.table {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.table-hover tbody tr:hover {
+  background: var(--primary-light);
+}
+
+/* Buttons */
+.btn {
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 6px 14px;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e9ecef;
+}
+
+/* Forms */
+.form-control {
+  border-radius: 6px;
+  box-shadow: none !important;
+  border: 1px solid #ccc;
+}
+
+  .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+  }
+
+/* Validation */
+.text-danger {
+  font-size: 0.875rem;
+}
+
+/* Pagination */
+.pagination .page-link {
+  border-radius: 6px;
+  margin: 0 3px;
+}
+
+.pagination .active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Navbar */
+.navbar-custom {
+  background-color: var(--primary-color) !important;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+  .navbar-custom .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+  }
+
+    .navbar-custom .nav-link:hover {
+      opacity: 0.85;
+    }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  color: var(--text-light);
+}
