@@ -14,7 +14,7 @@
 body {
   background-color: #f7f9fc;
   color: var(--text-dark);
-  padding-top: 70px; /* navbar space */
+  padding-top: 0px; /* navbar space */
 }
 
 /* Card styling */

@@ -1,21 +1,13 @@
-using System;
-using System.Collections.Generic;
 using EmployeeManagementSystem.Models;
+
 using Microsoft.EntityFrameworkCore;
 
-namespace EmployeeManagementSystem.Data;
-
-public partial class AppDbContext : DbContext
+namespace EmployeeManagementSystem.Data
 {
-    public AppDbContext()
+    public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        public DbSet<Employee> Employees { get; set; }
     }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
-    {
-    }
-
-    public virtual DbSet<Employee> Employees { get; set; } = null!;
-
 }

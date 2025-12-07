@@ -1,181 +1,113 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EmployeeManagementSystem.Data;
-using EmployeeManagementSystem.Models;
 using System;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Services;
+using EmployeeManagementSystem.ViewModels;
 
 namespace EmployeeManagementSystem.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly AppDbContext _context;
-        private const int PageSize = 6; 
+        private readonly EmployeeService _service;
+        public EmployeeController(EmployeeService service) => _service = service;
 
-        public EmployeeController(AppDbContext context)
+        public async Task<IActionResult> Index(
+    string sortOrder,
+    string searchString,
+    int page = 1,
+    Employee.DepartmentEnum? department = null,
+    bool? isActive = null,
+    CancellationToken ct = default)  // شلنا joinedFrom و joinedTo
         {
-            _context = context;
+            ViewData["CurrentSort"] = sortOrder ?? string.Empty;
+            ViewData["CurrentFilter"] = searchString ?? string.Empty;
+            ViewData["CurrentDepartment"] = department?.ToString() ?? string.Empty;
+            ViewData["CurrentIsActive"] = isActive?.ToString() ?? string.Empty;
+
+            var model = await _service.GetEmployeesAsync(sortOrder, searchString, page, department, isActive, ct);
+            return View(model);
         }
 
-        
-        public async Task<IActionResult> Index(string sortOrder, string searchString, int page = 1)
+
+        public IActionResult Create() => View(new EmployeeCreateViewModel());
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(EmployeeCreateViewModel model, CancellationToken ct = default)
         {
-            var employees = await _context.Employees.ToListAsync();
+            if (!ModelState.IsValid) return View(model);
 
-            // SEARCH
-            if (!string.IsNullOrEmpty(searchString))
+            try
             {
-                string lower = searchString.ToLower();
-                employees = employees
-                    .Where(e =>
-                        e.FirstName.ToLower().Contains(lower) ||
-                        e.LastName.ToLower().Contains(lower) ||
-                        e.EmailAddress.ToLower().Contains(lower) ||
-                        e.Department.ToString().ToLower().Contains(lower))
-                    .ToList();
+                await _service.AddEmployeeAsync(model, ct);
+                return RedirectToAction(nameof(Index));
             }
-
-            // SORTING
-            employees = sortOrder switch
+            catch (InvalidOperationException ex)
             {
-                "FullName" => employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName).ToList(),
-                "FullName_desc" => employees.OrderByDescending(e => e.FirstName).ThenByDescending(e => e.LastName).ToList(),
-                "Department" => employees.OrderBy(e => e.Department).ToList(),
-                "Department_desc" => employees.OrderByDescending(e => e.Department).ToList(),
-                "JoinedDate" => employees.OrderBy(e => e.JoinedDate).ToList(),
-                "JoinedDate_desc" => employees.OrderByDescending(e => e.JoinedDate).ToList(),
-                _ => employees.OrderBy(e => e.EmployeeID).ToList(),
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
+        }
+
+        public async Task<IActionResult> Edit(int id, CancellationToken ct = default)
+        {
+            var details = await _service.GetEmployeeDetailsAsync(id, ct);
+            if (details == null) return NotFound();
+
+            var model = new EmployeeEditViewModel
+            {
+                EmployeeID = details.EmployeeID,
+                FirstName = details.FirstName,
+                LastName = details.LastName,
+                Department = Enum.TryParse<Employee.DepartmentEnum>(details.Department, out var dep) ? dep : null,
+                EmailAddress = details.EmailAddress,
+                Phone = details.Phone,
+                IsActive = details.IsActive,
+                JoinedDate = details.JoinedDate
             };
 
-            // Pagination
-            int totalRecords = employees.Count;
-            int totalPages = (int)Math.Ceiling(totalRecords / (double)PageSize);
-
-            if (page < 1)
-                page = 1;
-            if (page > totalPages && totalPages > 0)
-                page = totalPages;
-
-            var pagedEmployees = employees
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
-
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["CurrentPage"] = page;
-            ViewData["TotalPages"] = totalPages;
-
-            return View(pagedEmployees);
+            return View(model);
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeID == id);
-            if (employee == null)
-                return NotFound();
-
-            return View(employee);
-        }
-
-    
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Department,FirstName,LastName,IsActive,EmailAddress,Phone")] Employee employee)
+        public async Task<IActionResult> Edit(EmployeeEditViewModel model, CancellationToken ct = default)
         {
-            if (ModelState.IsValid)
-            {
-                employee.JoinedDate = DateTime.Now;
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return View(model);
 
-                TempData["SuccessMessage"] = "Employee added successfully!";
+            try
+            {
+                await _service.UpdateEmployeeAsync(model, ct);
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(employee);
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
         }
 
-    
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Details(int id, CancellationToken ct = default)
         {
-            if (id == null)
-                return NotFound();
-
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
-                return NotFound();
-
-            return View(employee);
+            var model = await _service.GetEmployeeDetailsAsync(id, ct);
+            if (model == null) return NotFound();
+            return View(model);
         }
 
-   
+        public async Task<IActionResult> Delete(int id, CancellationToken ct = default)
+        {
+            var model = await _service.GetEmployeeForDeleteAsync(id, ct);
+            if (model == null) return NotFound();
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeID,Department,FirstName,LastName,IsActive,EmailAddress,Phone,RowGuid,JoinedDate")] Employee employee)
+        public async Task<IActionResult> DeleteConfirmed(int EmployeeID, CancellationToken ct = default)
         {
-            if (id != employee.EmployeeID)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    employee.JoinedDate = DateTime.Now;
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "Employee updated successfully!";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Employees.Any(e => e.EmployeeID == id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(employee);
-        }
-
-       
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeID == id);
-            if (employee == null)
-                return NotFound();
-
-            return View(employee);
-        }
-
-        
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Employee deleted successfully!";
-            }
-
+            await _service.DeleteEmployeeAsync(EmployeeID, ct);
             return RedirectToAction(nameof(Index));
         }
     }

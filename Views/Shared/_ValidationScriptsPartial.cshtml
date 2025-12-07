@@ -1,25 +1,5 @@
-<environment include="Development">
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-</environment>
-
-<environment exclude="Development">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha384-wpf0FVfD1i2aKdbm5l1tGbRHJ+vOEI2vwsQIQD8kqUgFZyD2s6RyshfMlC1+wzP9"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
-</environment>
-
-<script>
-    $(function () {
-        $("form").each(function () {
-            $(this).on("submit", function () {
-                if (!$(this).valid()) {
-                    $(this).addClass("was-validated");
-                }
-            });
-        });
-    });
-</script>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.13/jquery.validate.unobtrusive.min.js"></script>
+}
