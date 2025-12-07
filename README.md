@@ -1,119 +1,102 @@
 # Employee Management System
 
-This is a simple **Employee Management System** built with **ASP.NET Core MVC** and **Entity Framework Core**. It demonstrates basic CRUD operations, safe data filtering, and clean separation of concerns using **Controllers**, **Services**, **Repositories**, and **ViewModels**.
-
----
+A simple web application built with ASP.NET Core MVC using **Razor Views** for managing employee data. The project demonstrates basic CRUD operations, server-side filtering, sorting, pagination, and safe database handling.
 
 ## Features
 
-* **Employee CRUD**
-
-  * Create, read, update, and delete employee records.
-  * Safe email validation to prevent duplicates.
-  * Status management (Active / Inactive) for employees.
-
-* **Filtering and Sorting**
-
-  * Search employees by name or email safely.
-  * Filter by department or active status.
-  * Sort by name or department.
-
-* **Pagination**
-
-  * Server-side pagination to handle large datasets efficiently.
-
-* **View Models**
-
-  * Separate **ViewModels** for create, edit, delete, details, and listing views.
-  * Avoids exposing Entity models directly to views.
-
-* **UI**
-
-  * Responsive and modern interface using Bootstrap.
-  * Clear separation between filter controls, tables, and pagination.
-  * Safe handling of null or empty fields in UI and search.
-
-* **Database Handling**
-
-  * All filtering, sorting, and paging is executed at the database level.
-  * Prevents loading all data into memory to improve performance.
-  * Uses **Repository** pattern for database communication via **Entity Framework Core**.
-
----
+* List all employees with pagination
+* Create, edit, view details, and delete employees
+* Filter employees by department and active status
+* Sort employees by name or department
+* Safe handling of search inputs and null values
+* Uses separate ViewModels to avoid using entities directly in views
+* Database operations handled through a repository and service layer
+* Bootstrap-based responsive UI with custom styling
+* Razor Views only, no Blazor or SPA frameworks
 
 ## Technologies Used
 
-* **ASP.NET Core MVC** (.NET 8)
-* **Entity Framework Core**
-* **SQL Server** (local or remote)
-* **Bootstrap 5**
-* **C#**
-* **Git** for version control
-
----
+* ASP.NET Core MVC
+* Entity Framework Core
+* C#
+* Razor Views
+* SQL Server
+* Bootstrap 5
+* Git
 
 ## Project Structure
 
 ```
 EmployeeManagementSystem/
 │
-├─ Controllers/         # Handles HTTP requests and returns Views
-├─ Models/              # Entity models representing database tables
-├─ ViewModels/          # View-specific models for safer data handling
-├─ Services/            # Business logic and database operations
-├─ Repositories/        # Database access abstraction
-├─ Views/               # Razor views for UI
-├─ wwwroot/             # CSS, JS, and static assets
-└─ Data/                # DbContext and database initializer
+├─ Controllers/        # Handles HTTP requests and responses
+├─ Models/             # Entity classes representing database tables
+├─ ViewModels/         # Separate models used for views
+├─ Services/           # Business logic and data handling
+├─ Repositories/       # Database interactions (EF Core)
+├─ Views/              # Razor Views for UI
+├─ wwwroot/            # Static files (CSS, JS, images)
+├─ Data/               # DbContext and database initialization
+├─ Program.cs          # Application entry point
+└─ EmployeeManagementSystem.csproj
 ```
 
----
+## Screenshots
 
-## Getting Started
+**Employee List Page**
 
-1. **Clone the repository:**
+![Employee List](Assets/screenshot1.png)
+
+**Create Employee Page**
+
+![Create Employee](Assets/screenshot2.png)
+
+**Employee Details Page**
+
+![Edit Employee](Assets/screenshot4.png)
+
+**Edit Employee Page**
+
+![Edit Employee](Assets/screenshot5.png)
+
+**Delete Employee Page**
+
+![Edit Employee](Assets/screenshot6.png)
+
+**Filter&Sort**
+
+![Edit Employee](Assets/screenshot7.png)
+
+## Setup
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/EsraaShiref/EmployeeManagementSystem.git
-cd EmployeeManagementSystem
 ```
 
-2. **Configure the database:**
+2. Open the solution in Visual Studio 2022 (or newer) with .NET 8 SDK installed.
 
-* Update `appsettings.json` with your SQL Server connection string:
+3. Update the connection string in `appsettings.json` to point to your SQL Server instance:
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=EmployeeDB;Trusted_Connection=True;MultipleActiveResultSets=true"
+  "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=EmployeeManagementDb;Trusted_Connection=True;MultipleActiveResultSets=true"
 }
 ```
 
-3. **Apply migrations and seed the database:**
+4. Apply migrations and seed the database if necessary.
 
-```bash
-dotnet ef database update
-```
+5. Run the project (F5 or Ctrl+F5).
 
-4. **Run the application:**
+## Notes
 
-```bash
-dotnet run
-```
-
-5. Open your browser at [https://localhost:5001](https://localhost:5001) to see the app.
-
----
-
-## Notes on Implementation
-
-* All **filtering, sorting, and paging** is done at the database level for performance.
-* All input fields are **trimmed and validated** before queries.
-* Null-safe operations prevent runtime errors when data is missing.
-* Entity models are **never used directly in views**; ViewModels ensure separation of concerns.
-* Services handle communication with repositories; controllers are thin and handle HTTP requests only.
-
----
+* Controllers do not contain business logic. All logic is in the **Services** layer, which communicates with **Repositories**.
+* Filtering, sorting, and pagination are performed at the database level for efficiency.
+* ViewModels are used to prevent exposing EF Core entities directly to Razor Views.
+* Safe handling of search inputs ensures no errors occur when values are null or empty.
+* Styling is done using Bootstrap with custom CSS.
 
 ## License
 
-This project is open-source and free to use.
+This project is open-source and available under the MIT License.
