@@ -19,7 +19,7 @@ The project covers:
 ## Key Techniques
 
 * Efficient querying and filtering in the repository layer.
-* Safe filtering to prevent null reference exceptions: `(e.FirstName ?? "").Contains(term)`.
+* Safe filtering to prevent null reference exceptions.
 * Server-side pagination for large datasets.
 * Separation of concerns:
 
